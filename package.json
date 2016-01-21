@@ -1,0 +1,18 @@
+{
+  "name": "aipps2",
+  "version": "0.0.0",
+  "description": "AIPPS2",
+  "main": "index.js",
+  "scripts": {
+    "test": "ls"
+  },
+  "author": "KTbo4-12",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "handlebars": "^4.0.5",
+    "hapi": "^12.1.0",
+    "hoek": "^3.0.4",
+    "path": "^0.12.7",
+    "vision": "^4.0.1"
+  }
+}
