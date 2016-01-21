@@ -1,34 +1,48 @@
 function Subscribers() {
-    this._data = [];
+    const firstId = 0;
+    var _data = [];
+    var _increment = firstId;
 
-    this.add = function (email, topic) {
-        if (!email) {
-            throw new Error('Email is empty');
+    this.add = function (socket, topic) {
+        if (!socket) {
+            throw new Error('Socket is empty');
         }
-
         if (!topic) {
             throw new Error('Topic is empty');
         }
 
-        this._data.forEach(function(item) {
-            if (item.topic == topic && item.email == email) {
-                throw new Error('Already subscribe');
+        _data.forEach(function (item) {
+            if (item.socket == socket && item.topic == topic) {
+                throw new Error('You have already subscribed on this topic');
             }
         });
 
-        this._data.push({
-            email: email,
+        _data[_increment] = {
+            socket: socket,
             topic: topic
-        });
+        };
 
-        return this._data.length - 1;
+        return _increment++;
     };
-    this.remove = function (email, topic) {
+    
+    this.remove = function (id) {
+        console.log(id);
+        if (!_data[id]) {
+            throw new Error('You haven\'t subscribed on this topic yet');
+        }
+        delete _data[id];
+    };
 
+    this.findId = function (socket, topic) {
+        for (var i = firstId; i < _data.length; i++) {
+            if (_data[i] && _data[i].socket == socket && _data[i].topic == topic) {
+                return i;
+            }
+        }
     };
 
     this.getData = function () {
-        return this._data;
+        return _data;
     };
 }
 
