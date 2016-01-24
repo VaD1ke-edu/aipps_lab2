@@ -126,15 +126,6 @@ var router = [
         }
     },
     {
-        path: '/getTopicsHtml',
-        method: 'GET',
-        config: {
-            handler: function(req, reply) {
-                reply.view('home', {topics: Topic.getData()});
-            }
-        }
-    },
-    {
         path: '/getStructure',
         method: 'GET',
         config: {

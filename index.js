@@ -6,8 +6,9 @@ const Path = require('path');
 const Hoek = require('hoek');
 
 var mainRoute = require('./src/routes/main.js'),
-    restRoute = require('./src/routes/rest.js');
+    RestRouter = require('./src/routes/rest.js');
 const server = new Hapi.Server();
+var restRoutes = new RestRouter(server);
 
 server.connection({
     port: Number(process.argv[2] || 8080),
@@ -42,6 +43,12 @@ server.register(require('vision'), (err) => {
     });
 
     server.route(mainRoute);
+});
+
+
+server.register(require('vision'), (err) => {
+    Hoek.assert(!err, err);
+    server.route(restRoutes.getRoutes());
 });
 
 server.start();
