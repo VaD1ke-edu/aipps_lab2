@@ -13,6 +13,13 @@ var router = [
         method: 'GET',
         config: {
             handler: function(req, reply) {
+                var options = {
+                    host: 'localhost',
+                    port: 8000,
+                    path: '/subscriber/0',
+                    method: 'DELETE'
+                };
+                http.request(options).end();
                 reply.view('home', {topics: Topic.getData()}, { layout: 'main' });
             }
         }
@@ -74,17 +81,22 @@ var router = [
         path: '/unsubscribeFromAll',
         method: 'GET',
         config: {
-            handler: function() {
-                Subscription.getData().forEach(function(subscribtion) {
-                    var address = subscribtion.address.split(':');
+            handler: function(req, reply) {
+                Subscription.getData().forEach(function(subscription) {
+                    console.log('unsubscribe from ' + subscription.id);
+                    var address = subscription.address.split(':');
+                    console.log(address[0] + ' ' + address[1]);
                     var options = {
-                        host: address[0],
-                        port: address[1],
-                        path: '/subscriber/' + subscribtion.id,
+                        host: 'localhost',
+                        port: 8000,
+                        path: '/subscriber/0',
                         method: 'DELETE'
                     };
                     http.request(options).end();
                 });
+                setTimeout(function () {
+                    reply('Successfully unsubscribed from all');
+                }, 1000);
             }
         }
     },

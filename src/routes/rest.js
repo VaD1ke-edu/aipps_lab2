@@ -7,8 +7,6 @@ var Subscriber = require('../models/subscriber.js'),
 
 
 function RestRouter(server) {
-    var _this = this;
-    this._server = server;
     this.getRoutes = function() {
         return [
             {
@@ -51,12 +49,12 @@ function RestRouter(server) {
                                 topic = req.payload.topic,
                                 socket = req.connection.info.host + ':' + req.connection.info.port;
                             var id = Subscriber.add(address, topic);
-                            reply({
+                            reply(JSON.stringify({
                                 message: 'You have successfully subscribed on topic "' + topic + '" on server ' + socket,
                                 status: 'success',
                                 address: socket,
                                 id: id
-                            });
+                            }));
                         } catch (e) {
                             reply(JSON.stringify({
                                 message: e.message, status: 'fail'
@@ -70,6 +68,7 @@ function RestRouter(server) {
                 method: 'DELETE',
                 config: {
                     handler: function(req, reply) {
+                        console.log('unsubsc');
                         try {
                             var subscriber = Subscriber.remove(req.params.id);
                             reply('Subscriber with ID ' + req.params.id + ' was successfully unsubscribed');

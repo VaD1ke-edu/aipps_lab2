@@ -55,9 +55,8 @@ server.register(require('inert'), (err) => {
 server.start();
 
 function destructor() {
-    console.log('destructor');
-    process.exit();
-    return;
+    console.log(host);
+    console.log(port);
     var options = {
         host: host,
         port: port,
@@ -65,10 +64,12 @@ function destructor() {
         method: 'GET'
     };
 
-    http.request(options, function() {
-        console.log('Quit');
+    http.request(options, function(res) {
+        res.on('data', function () {
+            console.log('Quit');
+            process.exit();
+        });
     }).end();
-    process.exit();
 }
 
 process.on('SIGTERM', destructor);

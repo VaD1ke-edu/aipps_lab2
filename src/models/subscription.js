@@ -5,7 +5,7 @@ function Subscriptions() {
         if (!address) {
             throw new Error('Address of subscription is empty');
         }
-        if (!id) {
+        if (!id && id !== 0) {
             throw new Error('ID of subscription is empty');
         }
 
