@@ -68,7 +68,6 @@ function RestRouter(server) {
                 method: 'DELETE',
                 config: {
                     handler: function(req, reply) {
-                        console.log('unsubsc');
                         try {
                             var subscriber = Subscriber.remove(req.params.id);
                             reply('Subscriber with ID ' + req.params.id + ' was successfully unsubscribed');

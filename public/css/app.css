@@ -1,3 +1,7 @@
+.content {
+    margin: 50px 0;
+}
+
 .popup {
     position: fixed;
     left: 0;
@@ -76,12 +80,138 @@
     color: #2ecc71;
 }
 
-
-.topic {
-    max-width: 400px;
-    margin: 20px 0;
+.topics {
+    margin-left: 100px;
 }
 
+.topic {
+    max-width: 600px;
+    margin: 30px auto;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    position: relative;
+    border-bottom: 1px solid #3d566e;
+}
+
+.topic__title {
+    margin: 10px 0;
+    color: #222;
+}
+
+.topic__content {
+    margin: 10px 0 10px 3rem;
+    color: #2c3e50;
+}
+
+.topic__create {
+    left: 5rem;
+}
+
+.topic__delete {
+    position: absolute;
+    margin-top: 100px;
+    padding: 7px 40px 30px 40px;
+    width: 140px;
+    height: 25px;
+    right: 2rem;
+    bottom: 1rem;
+
+    background: #e74c3c;
+    border: 1px solid #e74c3c;
+    color: #fff;
+
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 300;
+}
+
+.topic__delete:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.topic-form {
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.topic-form__title, .topic-form__content {
+    margin: 10px;
+}
+
+.topic-form__content {
+    width: 300px;
+    height: 100px;
+}
+
+.topic-form__create {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 7px 40px 30px 40px;
+    width: 140px;
+    height: 25px;
+
+    background: #2ecc71;
+    border: 1px solid #2ecc71;
+    color: #fff;
+
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 300;
+}
+
+.notifications__link, .topic__create {
+    position: fixed;
+    top: 10rem;
+    padding: 15px;
+    min-width: 170px;
+    text-align: center;
+
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 1.6rem;
+    color: #333;
+
+    border: 2px solid #333;
+    border-radius: 30px;
+}
+
+.no-topics {
+    max-width: 400px;
+    margin: 100px auto;
+    font-size: 24px;
+    color: #333;
+}
+
+.notifications__link {
+    left: 5rem;
+    top: 3rem;
+}
+
+.notifications__link:hover, .topic__create:hover {
+    opacity: 0.8;
+}
+
+.notifications_title {
+    font-family: "Nunito", sans-serif;
+    font-size: 28px;
+    color: #333;
+}
+
+.notification {
+    margin: 20px;
+}
+
+.notification_date {
+    color: #2c3e50;
+    font-size: 12px;
+}
+
+
+.history {
+    max-width: 600px;
+    margin: 40px auto;
+}
 
 .notification_success {
     color: #2ecc71;
@@ -93,4 +223,15 @@
 
 .notification_usual {
     color: #333;
+}
+
+.to-main {
+    text-align: center;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 1.6rem;
+    color: #333;
+    border: 2px solid #333;
+    border-radius: 30px;
+    padding: 10px;
 }

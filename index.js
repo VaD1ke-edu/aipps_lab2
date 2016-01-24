@@ -55,8 +55,6 @@ server.register(require('inert'), (err) => {
 server.start();
 
 function destructor() {
-    console.log(host);
-    console.log(port);
     var options = {
         host: host,
         port: port,

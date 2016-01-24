@@ -83,20 +83,18 @@ var router = [
         config: {
             handler: function(req, reply) {
                 Subscription.getData().forEach(function(subscription) {
-                    console.log('unsubscribe from ' + subscription.id);
                     var address = subscription.address.split(':');
-                    console.log(address[0] + ' ' + address[1]);
                     var options = {
-                        host: 'localhost',
-                        port: 8000,
-                        path: '/subscriber/0',
+                        host: address[0],
+                        port: address[1],
+                        path: '/subscriber/' + subscription.id,
                         method: 'DELETE'
                     };
                     http.request(options).end();
                 });
                 setTimeout(function () {
                     reply('Successfully unsubscribed from all');
-                }, 1000);
+                }, 600);
             }
         }
     },

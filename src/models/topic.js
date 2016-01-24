@@ -1,6 +1,7 @@
 function Topics() {
     const firstId = 1;
-    var _data = [{id: 0, title: 'test', content:['test', 'test1']}];
+    //var _data = [{id: 0, title: 'test', content:['test', 'test1']}];
+    var _data = [];
     var _increment = firstId;
 
     this.add = function(title, content) {
