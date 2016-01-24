@@ -26,19 +26,44 @@ function Subscribers() {
     };
     
     this.remove = function(id) {
-        console.log(id);
         if (!_data[id]) {
             throw new Error('You haven\'t subscribed on this topic yet');
         }
+        var dataToDelete = _data[id];
         delete _data[id];
+        return dataToDelete;
     };
 
-    this.findId = function(address, topic) {
+    this.removeByAddress = function(address) {
+        var ids = [];
         for (var i = firstId; i < _data.length; i++) {
-            if (_data[i] && _data[i].address == address && _data[i].topic == topic) {
-                return i;
+            if (_data[i] && _data[i].address == address) {
+                ids.push(i);
             }
         }
+        ids.forEach(function (id) {
+            delete _data[id];
+        });
+    };
+
+    this.removeAll = function() {
+        _data = {};
+        _increment = firstId;
+    };
+
+    this.find = function(address, topic) {
+        var ids = [];
+        if (address) {
+
+        }
+        for (var i = firstId; i < _data.length; i++) {
+            if (_data[i]
+                && (_data[i].address == address || !address)
+                && (_data[i].topic == topic || !topic)) {
+                ids.push(i);
+            }
+        }
+        return ids;
     };
 
     this.getData = function() {

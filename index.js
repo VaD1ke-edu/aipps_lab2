@@ -1,8 +1,9 @@
 'use strict';
-const host = 'localhost';
+const host = 'localhost',
+      port = Number(process.argv[2] || 8080);
 
-var Hapi = require('hapi');
-const Path = require('path');
+var Hapi = require('hapi'),
+    http = require('http');
 const Hoek = require('hoek');
 
 var mainRoute = require('./src/routes/main.js'),
@@ -11,7 +12,7 @@ const server = new Hapi.Server();
 var restRoutes = new RestRouter(server);
 
 server.connection({
-    port: Number(process.argv[2] || 8080),
+    port: port,
     host: host
 });
 
@@ -46,9 +47,29 @@ server.register(require('vision'), (err) => {
 });
 
 
-server.register(require('vision'), (err) => {
+server.register(require('inert'), (err) => {
     Hoek.assert(!err, err);
     server.route(restRoutes.getRoutes());
 });
 
 server.start();
+
+function destructor() {
+    console.log('destructor');
+    process.exit();
+    return;
+    var options = {
+        host: host,
+        port: port,
+        path: '/unsubscribeFromAll',
+        method: 'GET'
+    };
+
+    http.request(options, function() {
+        console.log('Quit');
+    }).end();
+    process.exit();
+}
+
+process.on('SIGTERM', destructor);
+process.on('SIGINT', destructor);

@@ -1,8 +1,11 @@
+<a href="/getNotifications">Notifications</a>
 {{#if topics}}
     {{#each topics }}
         <div class="topic" data-id="{{this.id}}">
             <h1 class="topic__title">{{this.title}}</h1>
-            <div class="topic__content">{{this.content}}</div>
+            {{#each this.content}}
+                <div class="topic__content">{{this}}</div>
+            {{/each}}
             <button class="topic__subscribe js-subscribe-button">Subscribe</button>
             <button class="topic__unsubscribe js-unsubscribe-button">Unsubscribe</button>
             <button class="topic__delete js-delete-button">Delete topic</button>

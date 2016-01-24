@@ -1,6 +1,6 @@
 function Topics() {
     const firstId = 1;
-    var _data = [{"id":0,"title":"test","content":"test"}];
+    var _data = [{id: 0, title: 'test', content:['test', 'test1']}];
     var _increment = firstId;
 
     this.add = function(title, content) {
@@ -11,16 +11,25 @@ function Topics() {
             throw new Error('Content is empty');
         }
 
+        var topicId = false;
         _data.forEach(function(item) {
-            if (item.title == title && item.content == content) {
-                throw new Error('Topic already exists');
+            if (item.title == title) {
+                if (item.content == content) {
+                    throw new Error('Topic already exists');
+                }
+                topicId = item.id;
             }
         });
+
+        if (topicId !== false) {
+            _data[topicId].content.push(content);
+            return topicId;
+        }
 
         _data[_increment] = {
             id: _increment,
             title: title,
-            content: content
+            content: [content]
         };
 
         return _increment++;

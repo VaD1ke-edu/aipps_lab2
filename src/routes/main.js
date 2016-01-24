@@ -1,6 +1,9 @@
 var Subscriber = require('../models/subscriber.js'),
     Topic = require('../models/topic.js'),
-    Structure = require('../models/structure.js');
+    Structure = require('../models/structure.js'),
+    History = require('../models/history.js'),
+    Subscription = require('../models/subscription.js'),
+    http = require('http');
 
 var structure = new Structure(Subscriber, Topic);
 
@@ -53,7 +56,7 @@ var router = [
                 try {
                     //var socket = req.connection.info.address + ':' + req.connection.info.port;
                     var socket = req.connection.info.address;
-                    Subscriber.remove(Subscriber.findId(socket, req.payload.topic));
+                    Subscriber.remove(Subscriber.find(socket, req.payload.topic)[0]);
                     reply(JSON.stringify({
                         status: 'success',
                         message: 'You have successfully unsubscribed'
@@ -64,6 +67,24 @@ var router = [
                         message: e.message
                     }));
                 }
+            }
+        }
+    },
+    {
+        path: '/unsubscribeFromAll',
+        method: 'GET',
+        config: {
+            handler: function() {
+                Subscription.getData().forEach(function(subscribtion) {
+                    var address = subscribtion.address.split(':');
+                    var options = {
+                        host: address[0],
+                        port: address[1],
+                        path: '/subscriber/' + subscribtion.id,
+                        method: 'DELETE'
+                    };
+                    http.request(options).end();
+                });
             }
         }
     },
@@ -82,7 +103,14 @@ var router = [
         config: {
             handler: function(req, reply) {
                 try {
-                    Topic.add(req.payload.title, req.payload.content);
+                    var title = req.payload.title,
+                        content = req.payload.content,
+                        socket = req.connection.info.host + ':' + req.connection.info.port;
+                    Topic.add(title, content);
+                    notifyTopicSubscribers(reply, title, JSON.stringify({
+                        message: 'Topic with name "' + title + '" on server ' + socket + ' was updated: "' + content + '"',
+                        status: 'success'
+                    }));
                     reply(JSON.stringify({
                         status: 'success',
                         message: 'You have successfully created the topic'
@@ -102,7 +130,13 @@ var router = [
         config: {
             handler: function(req, reply) {
                 try {
+                    var topic = Topic.getData()[req.params.id],
+                        socket = req.connection.info.host + ':' + req.connection.info.port;
                     Topic.remove(req.params.id);
+                    notifyTopicSubscribers(reply, topic.title, JSON.stringify({
+                        message: 'Topic with name "' + topic.title + '" on server ' + socket + ' was deleted',
+                        status: 'success'
+                    }));
                     reply(JSON.stringify({
                         status: 'success',
                         message: 'You have successfully removed the topic'
@@ -135,37 +169,80 @@ var router = [
         }
     },
     {
+        path: '/getSubscriptions',
         method: 'GET',
-        path: '/removeSubscriber/{id?}',
-        handler: function(req, reply) {
-            var id = req.params.id;
-            if (!id) {
-                return reply('No id');
+        config: {
+            handler: function(req, reply) {
+                return reply(JSON.stringify(Subscription.getData()));
             }
-
-            if (!Subscriber.getData()[id]) {
-                return reply('Subscriber not found.').code(404);
-            }
-            Subscriber.remove(id);
-            return reply('Subscriber was removed successfully');
         }
     },
     {
+        path: '/notify',
+        method: 'POST',
+        config: {
+            handler: function(req, reply) {
+                var socket = req.connection.info.address + ':' + req.connection.info.port;
+                var message = req.payload.message;
+                if (!message) {
+                    reply(JSON.stringify({message: 'Notification is empty', status: 'fail'}));
+                    return;
+                }
+                History.add(message, req.payload.status);
+                reply(JSON.stringify({
+                    message: socket +' was successfully notified.\n Notification: ' + message,
+                    status: 'success'
+                }));
+            }
+        }
+    },
+    {
+        path: '/getNotifications',
         method: 'GET',
-        path: '/generateTopicEvent/{id?}',
-        handler: function(req, reply) {
-            var id = req.params.id;
-            if (!id) {
-                return reply('No id');
+        config: {
+            handler: function(req, reply) {
+                reply.view('history', {notifications: History.getData()}, { layout: 'main' });
             }
-
-            if (!Subscriber.getData()[id]) {
-                return reply('Subscriber not found.').code(404);
-            }
-            Subscriber.remove(id);
-            return reply('Subscriber was removed successfully');
         }
     }
 ];
+
+function notifyTopicSubscribers(reply, title, notificationMessage) {
+    var subscriberIds = Subscriber.find(null, title);
+    if (!subscriberIds) {
+        return reply(JSON.stringify({
+            status: 'success',
+            message: 'You have successfully created the topic'
+        }));
+    }
+    var subscribersToNotify = [];
+    var subscribers = Subscriber.getData();
+
+    subscriberIds.forEach(function(id) {
+        if (subscribers[id] && subscribers[id].hasOwnProperty('address')) {
+            subscribersToNotify.push(subscribers[id].address);
+        }
+    });
+
+    subscribersToNotify.forEach(function(address) {
+        address = address.split(':');
+
+        var options = {
+            host: address[0],
+            port: address[1],
+            path: '/notify',
+            method: 'POST'
+        };
+
+        var request = http.request(options, function(res) {
+            res.on('data', function (data) {
+                data = JSON.parse(data);
+                History.add(data.message, data.status);
+            });
+        });
+        request.write(notificationMessage);
+        request.end();
+    });
+}
 
 module.exports = router;

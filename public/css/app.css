@@ -76,7 +76,21 @@
     color: #2ecc71;
 }
 
+
 .topic {
     max-width: 400px;
     margin: 20px 0;
+}
+
+
+.notification_success {
+    color: #2ecc71;
+}
+
+.notification_fail {
+    color: #e74c3c;
+}
+
+.notification_usual {
+    color: #333;
 }

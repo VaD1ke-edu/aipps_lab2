@@ -1,0 +1,15 @@
+{{#if notifications }}
+    <h1 class="notifications_title">Notifications</h1>
+    <div class="notifications">
+        {{#each notifications }}
+            <div class="notification notification_{{this.status}}">
+                {{this.message}}
+            </div>
+            <div class="notification_date">
+                {{this.created_at}}
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <div>History of notifications is empty</div>
+{{/if}}
