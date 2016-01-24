@@ -1,9 +1,9 @@
 function Topics() {
-    const firstId = 0;
-    var _data = [];
+    const firstId = 1;
+    var _data = [{"id":0,"title":"test","content":"test"}];
     var _increment = firstId;
 
-    this.add = function (title, content) {
+    this.add = function(title, content) {
         if (!title) {
             throw new Error('Title is empty');
         }
@@ -11,7 +11,7 @@ function Topics() {
             throw new Error('Content is empty');
         }
 
-        _data.forEach(function (item) {
+        _data.forEach(function(item) {
             if (item.title == title && item.content == content) {
                 throw new Error('Topic already exists');
             }
@@ -26,14 +26,14 @@ function Topics() {
         return _increment++;
     };
 
-    this.remove = function (id) {
+    this.remove = function(id) {
         if (!_data[id]) {
             throw new Error('Topic with this ID not found');
         }
         delete _data[id];
     };
 
-    this.getData = function () {
+    this.getData = function() {
         return _data;
     };
 }

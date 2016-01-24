@@ -75,3 +75,8 @@
 .popup__title.success {
     color: #2ecc71;
 }
+
+.topic {
+    max-width: 400px;
+    margin: 20px 0;
+}

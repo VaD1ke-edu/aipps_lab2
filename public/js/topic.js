@@ -10,7 +10,7 @@ $(function () {
                 content: $form.find('#content')[0].value
             },
             dataType: 'json',
-            success: function (data) {
+            success: function(data) {
                 if (data.status == 'success') {
                     $popup = $('#popup');
                     $popup.addClass('is-visible')
@@ -31,23 +31,25 @@ $(function () {
 
     $(function() {
         // close popup
-        $('#popup').on('click', function (event){
-            if( $(event.target).is('.popup__close') || $(event.target).is('#popup') ) {
+        $('#popup').on('click', function(event){
+            if($(event.target).is('.popup__close') || $(event.target).is('#popup') ) {
                 event.preventDefault();
                 $(this).removeClass('is-visible');
                 if ($(this).attr('status') == 'success') {
-                    window.location.replace(window.location.host);
+                    window.location = $('#to-main').attr('href');
                 }
             }
         });
 
         // close popup when clicking the esc keyboard button
-        $(document).keyup(function (event){
-            if(event.which=='27'){
-                $('#popup').removeClass('is-visible');
-                if ($('#popup').attr('status') == 'success') {
-                    window.location.replace(window.location.host);
-                }
+        $(document).keyup(function(event){
+            if(event.which != '27'){
+                return;
+            }
+            var $popup = $('#popup');
+            $popup.removeClass('is-visible');
+            if ($popup.attr('status') == 'success') {
+                window.location = $('#to-main').attr('href');
             }
         });
     });
