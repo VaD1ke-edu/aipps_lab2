@@ -13,13 +13,6 @@ var router = [
         method: 'GET',
         config: {
             handler: function(req, reply) {
-                var options = {
-                    host: 'localhost',
-                    port: 8000,
-                    path: '/subscriber/0',
-                    method: 'DELETE'
-                };
-                http.request(options).end();
                 reply.view('home', {topics: Topic.getData()}, { layout: 'main' });
             }
         }
